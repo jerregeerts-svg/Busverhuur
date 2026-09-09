@@ -2,21 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Kleuren als RGB-triplets zodat Tailwind opacity kan toepassen */
+/* Huisstijl Cello (cello-zorg.nl): magenta, wit, Mulish */
 :root {
-  --bg: 244 246 243; --surface: 255 255 255; --surface2: 234 238 233; --line: 214 221 216; --line-strong: 185 196 190;
-  --ink: 21 34 38; --ink-2: 76 94 99; --ink-3: 124 140 144;
-  --brand: 14 75 90; --brand-ink: 255 255 255; --brand-soft: 220 235 238; --brand-deep: 8 49 60;
-  --accent: 227 134 31; --accent-ink: 27 21 9; --accent-soft: 251 235 214;
-  --ok: 30 127 79; --ok-soft: 221 241 229; --warn: 183 100 26; --warn-soft: 251 233 211; --bad: 180 50 46; --bad-soft: 248 222 220;
+  --bg: 255 255 255; --surface: 255 255 255; --surface2: 245 245 245; --line: 227 227 229; --line-strong: 208 208 212;
+  --ink: 87 87 86; --ink-2: 89 91 96; --ink-3: 141 143 148;
+  --brand: 212 15 126; --brand-ink: 255 255 255; --brand-soft: 251 230 242; --brand-deep: 176 12 104;
+  --accent: 212 15 126; --accent-ink: 255 255 255; --accent-soft: 251 230 242;
+  --ok: 133 183 137; --ok-soft: 232 243 233; --warn: 231 80 15; --warn-soft: 253 234 224; --bad: 200 42 42; --bad-soft: 250 226 226;
 }
+/* Cello is altijd licht; donkere modus volgt dezelfde huisstijl */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: 15 23 25; --surface: 23 34 42; --surface2: 31 44 52; --line: 42 58 66; --line-strong: 59 78 87;
-    --ink: 236 241 240; --ink-2: 174 191 195; --ink-3: 127 146 151;
-    --brand: 47 141 163; --brand-ink: 6 20 24; --brand-soft: 18 54 65; --brand-deep: 30 109 128;
-    --accent: 240 162 74; --accent-ink: 27 21 9; --accent-soft: 59 42 20;
-    --ok: 76 192 138; --ok-soft: 21 53 38; --warn: 240 162 74; --warn-soft: 59 42 20; --bad: 240 122 116; --bad-soft: 63 31 30;
+    --bg: 255 255 255; --surface: 255 255 255; --surface2: 245 245 245; --line: 227 227 229; --line-strong: 208 208 212;
+    --ink: 87 87 86; --ink-2: 89 91 96; --ink-3: 141 143 148;
+    --brand: 212 15 126; --brand-ink: 255 255 255; --brand-soft: 251 230 242; --brand-deep: 176 12 104;
+    --accent: 212 15 126; --accent-ink: 255 255 255; --accent-soft: 251 230 242;
+    --ok: 133 183 137; --ok-soft: 232 243 233; --warn: 231 80 15; --warn-soft: 253 234 224; --bad: 200 42 42; --bad-soft: 250 226 226;
   }
 }
 
@@ -214,3 +215,16 @@
   .step-sheen { display: none; }
   .reveal, .reveal-stagger > * { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
+
+
+/* De vier tegels in de vier Cello-kleuren */
+.usp-tile { position: relative; }
+.usp-tile::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; }
+.usp-tile:nth-child(1)::before { background: #d40f7e; }
+.usp-tile:nth-child(2)::before { background: #e7500f; }
+.usp-tile:nth-child(3)::before { background: #84a6af; }
+.usp-tile:nth-child(4)::before { background: #85b789; }
+.usp-tile:nth-child(1) svg { color: #d40f7e; }
+.usp-tile:nth-child(2) svg { color: #e7500f; }
+.usp-tile:nth-child(3) svg { color: #84a6af; }
+.usp-tile:nth-child(4) svg { color: #85b789; }
