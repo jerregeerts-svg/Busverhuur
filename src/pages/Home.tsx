@@ -12,6 +12,8 @@ export function Home() {
   const [date, setDate] = useState(toIso(addDays(today(), 2)));
   const [time, setTime] = useState("10:00");
   const max = toIso(addDays(today(), CONFIG.horizonDays));
+  const selectedVehicle = Object.values(VEHICLES).find((v) => v.id === veh);
+  const dateLabel = date ? new Date(date + "T00:00:00").toLocaleDateString("nl-NL", { weekday: "short", day: "numeric", month: "short" }) : "";
 
   function go() {
     if (date > max || date < toIso(today())) { nav("/contact?reden=lange-termijn"); return; }
@@ -42,20 +44,42 @@ export function Home() {
             <div><b className="block font-display text-[1.5rem] font-extrabold"><CountUp to={CONFIG.horizonDays} suffix=" dagen" /></b><span className="text-[.84rem] text-ink2">online vooruit te boeken</span></div>
           </div>
         </div>
-        <div className="bg-surface border border-line rounded-lg p-[22px] shadow-card a-up a-d3 a-float">
-          <span className="eyebrow">Snel boeken</span>
-          <h3 className="mb-1">Beschikbaarheid bekijken</h3>
-          <p className="text-[.86rem] text-ink2">Kies een bus en een datum, wij tonen direct wat vrij is.</p>
-          <div className="grid grid-cols-2 gap-3 mt-4">
-            <label className="field col-span-2"><span>Voertuig</span>
-              <select value={veh} onChange={(e) => setVeh(e.target.value)}>
-                {Object.values(VEHICLES).map((v) => <option key={v.id} value={v.id}>{v.short} · {v.seats} personen{v.wheelchair ? " · rolstoelbus" : ""}</option>)}
-              </select></label>
-            <label className="field"><span>Datum</span><input type="date" value={date} min={toIso(today())} max={max} onChange={(e) => setDate(e.target.value)} /></label>
-            <label className="field"><span>Ophalen om</span><select value={time} onChange={(e) => setTime(e.target.value)}>{CONFIG.times.map((t) => <option key={t}>{t}</option>)}</select></label>
-            <button className="btn btn-brand col-span-2" onClick={go}>Beschikbaarheid bekijken →</button>
+        <div className="bg-surface border border-line rounded-lg shadow-card overflow-hidden a-up a-d3 a-float">
+          <div className="flex items-center gap-3 px-[22px] py-4 bg-brand text-brandInk">
+            <span className="grid place-items-center w-10 h-10 rounded-md bg-white/15 shrink-0"><Icon.Bus className="w-5 h-5" /></span>
+            <div className="min-w-0">
+              <span className="block text-[.7rem] font-bold tracking-[.14em] uppercase opacity-80">Snel boeken</span>
+              <h3 className="leading-tight">Beschikbaarheid bekijken</h3>
+            </div>
+            <span className="ml-auto hidden sm:inline-flex items-center whitespace-nowrap text-[.74rem] font-bold bg-white/15 px-2.5 py-1 rounded-full">{selectedVehicle?.seats} personen</span>
           </div>
-          <p className="text-[.86rem] text-ink2 mt-3">Verder dan {CONFIG.horizonDays} dagen vooruit? <Link to="/contact?reden=lange-termijn">Vraag het aan via het contactformulier.</Link></p>
+
+          <div className="p-[22px]">
+            <p className="text-[.86rem] text-ink2">Kies een bus en een datum, wij tonen direct wat vrij is.</p>
+            <div className="grid grid-cols-2 gap-3 mt-4">
+              <label className="field col-span-2"><span>Voertuig</span>
+                <select value={veh} onChange={(e) => setVeh(e.target.value)}>
+                  {Object.values(VEHICLES).map((v) => <option key={v.id} value={v.id}>{v.short} · {v.seats} personen{v.wheelchair ? " · rolstoelbus" : ""}</option>)}
+                </select></label>
+              <label className="field"><span>Datum</span><input type="date" value={date} min={toIso(today())} max={max} onChange={(e) => setDate(e.target.value)} /></label>
+              <label className="field"><span>Ophalen om</span><select value={time} onChange={(e) => setTime(e.target.value)}>{CONFIG.times.map((t) => <option key={t}>{t}</option>)}</select></label>
+            </div>
+
+            <div className="flex items-center gap-2.5 mt-4 px-3 py-2.5 rounded-md bg-brandSoft text-[.87rem] font-semibold text-ink">
+              <Icon.Check className="w-4 h-4 text-brand shrink-0" />
+              <span className="truncate">{selectedVehicle?.short} · {dateLabel} · {time} uur</span>
+            </div>
+
+            <button className="btn btn-brand w-full mt-3 py-[13px] text-[1rem]" onClick={go}>Beschikbaarheid bekijken →</button>
+
+            <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-3 text-[.78rem] font-semibold text-ink2">
+              <span className="inline-flex items-center gap-1.5"><Icon.Check className="w-3.5 h-3.5 text-ok" />Direct bevestiging</span>
+              <span className="inline-flex items-center gap-1.5"><Icon.Check className="w-3.5 h-3.5 text-ok" />Geen borg</span>
+              <span className="inline-flex items-center gap-1.5"><Icon.Check className="w-3.5 h-3.5 text-ok" />Betalen achteraf</span>
+            </div>
+
+            <p className="text-[.8rem] text-ink3 mt-3">Verder dan {CONFIG.horizonDays} dagen vooruit? <Link to="/contact?reden=lange-termijn">Vraag het aan via het contactformulier.</Link></p>
+          </div>
         </div>
       </section>
 
