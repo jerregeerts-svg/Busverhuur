@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Kleuren als RGB-triplets zodat Tailwind opacity kan toepassen */
+:root {
+  --bg: 244 246 243; --surface: 255 255 255; --surface2: 234 238 233; --line: 214 221 216; --line-strong: 185 196 190;
+  --ink: 21 34 38; --ink-2: 76 94 99; --ink-3: 124 140 144;
+  --brand: 14 75 90; --brand-ink: 255 255 255; --brand-soft: 220 235 238; --brand-deep: 8 49 60;
+  --accent: 227 134 31; --accent-ink: 27 21 9; --accent-soft: 251 235 214;
+  --ok: 30 127 79; --ok-soft: 221 241 229; --warn: 183 100 26; --warn-soft: 251 233 211; --bad: 180 50 46; --bad-soft: 248 222 220;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: 15 23 25; --surface: 23 34 42; --surface2: 31 44 52; --line: 42 58 66; --line-strong: 59 78 87;
+    --ink: 236 241 240; --ink-2: 174 191 195; --ink-3: 127 146 151;
+    --brand: 47 141 163; --brand-ink: 6 20 24; --brand-soft: 18 54 65; --brand-deep: 30 109 128;
+    --accent: 240 162 74; --accent-ink: 27 21 9; --accent-soft: 59 42 20;
+    --ok: 76 192 138; --ok-soft: 21 53 38; --warn: 240 162 74; --warn-soft: 59 42 20; --bad: 240 122 116; --bad-soft: 63 31 30;
+  }
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-bg text-ink font-body antialiased text-[15.5px] leading-[1.55]; }
+  h1, h2, h3, h4 { @apply font-display leading-[1.1] tracking-[-0.01em]; text-wrap: balance; }
+  h1 { @apply font-extrabold text-[clamp(2.1rem,4.6vw,3.6rem)]; }
+  h2 { @apply font-bold text-[clamp(1.5rem,2.6vw,2.1rem)]; }
+  h3 { @apply font-bold text-[1.15rem]; }
+  :focus-visible { @apply outline outline-2 outline-accent outline-offset-2; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+}
+
+@layer components {
+  .wrap { @apply max-w-[1140px] mx-auto px-6; }
+  .eyebrow { @apply text-[.72rem] font-bold tracking-[.12em] uppercase text-brand; }
+  .btn { @apply inline-flex items-center justify-center gap-2 px-[18px] py-[11px] rounded-md border border-transparent font-bold text-[.93rem] no-underline whitespace-nowrap transition active:translate-y-px disabled:opacity-50 disabled:cursor-not-allowed; }
+  .btn-primary { @apply bg-accent text-accentInk hover:brightness-105; }
+  .btn-brand { @apply bg-brand text-brandInk hover:bg-brandDeep; }
+  .btn-ghost { @apply bg-transparent border-lineStrong text-ink hover:bg-surface2; }
+  .btn-sm { @apply px-3 py-[7px] text-[.84rem] rounded-lg; }
+  .card { @apply bg-surface border border-line rounded-lg p-6; }
+  .panel { @apply bg-surface border border-line rounded-lg p-[26px]; }
+  .field { @apply flex flex-col gap-1.5 text-[.84rem] font-semibold text-ink2; }
+  .field input, .field select, .field textarea { @apply px-3 py-2.5 border border-lineStrong rounded-lg bg-surface text-ink text-[.95rem] font-medium w-full focus:border-brand focus:outline focus:outline-2 focus:outline-brand/25; }
+  .field .hint { @apply font-medium text-ink3 text-[.78rem]; }
+  .field.req > span:first-child::after { content: " *"; @apply text-bad; }
+  .tag { @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[.75rem] font-bold whitespace-nowrap; }
+  .notice { @apply flex gap-3 p-4 rounded-md text-[.9rem] items-start; }
+  .err { @apply text-bad text-[.8rem] font-semibold; }
+  .kv { @apply grid grid-cols-[auto_1fr] gap-x-5 gap-y-2 text-[.92rem]; }
+  .kv dt { @apply text-ink2; }
+  .kv dd { @apply font-semibold; }
+  .num { font-variant-numeric: tabular-nums; }
+}
