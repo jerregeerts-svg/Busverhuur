@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { CONFIG, type VehicleInfo } from "@/config";
 import { eur } from "@/lib/format";
 import { BusArt, Icon, Tag } from "./ui";
+import { PhotoBus } from "./PhotoBus";
 
 export function VehicleCard({ v, driving = false }: { v: VehicleInfo; driving?: boolean }) {
   return (
     <article className="vcard bg-surface border border-line rounded-lg overflow-hidden flex flex-col">
-      <div className={`aspect-[2/1] grid place-items-center relative overflow-hidden ${driving ? "bg-gradient-to-b from-surface2 to-brandSoft" : "bg-gradient-to-br from-brandSoft to-surface2"}`}>
-        <BusArt wide={v.seats > 5} wheelchair={v.wheelchair} driving={driving} />
+      <div className={`aspect-[2/1] grid place-items-center relative overflow-hidden ${driving || v.photo ? "bg-gradient-to-b from-surface2 to-brandSoft" : "bg-gradient-to-br from-brandSoft to-surface2"}`}>
+        {v.photo ? <PhotoBus photo={v.photo} driving={driving} alt={v.name} /> : <BusArt wide={v.seats > 5} wheelchair={v.wheelchair} driving={driving} />}
         <span className="absolute top-3.5 left-3.5"><Tag kind="brand">{v.wheelchair ? "Rolstoelbus" : `${v.seats} personen`}</Tag></span>
       </div>
       <div className="p-[22px] flex flex-col gap-3.5 flex-1">

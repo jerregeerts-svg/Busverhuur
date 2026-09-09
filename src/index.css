@@ -124,7 +124,28 @@
 .lift { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .35s; }
 .lift:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -18px rgba(21,34,38,.35); border-color: rgb(var(--brand) / .4); }
 
+/* Foto-bus in 3D */
+@keyframes pbDriveIn { 0% { transform: translateX(-140%) translateZ(0); } 75% { transform: translateX(-48%) translateZ(0); } 100% { transform: translateX(-50%) translateZ(0); } }
+@keyframes pbBob { 0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg); } 30% { transform: translateX(-50%) translateY(-1.2px) rotate(-.15deg); } 70% { transform: translateX(-50%) translateY(.8px) rotate(.12deg); } }
+@keyframes pbScenery { from { transform: translateX(0); } to { transform: translateX(-500px); } }
+@keyframes pbRoad { to { background-position: -44px 0; } }
+.pb { perspective: 900px; }
+.pb-stage { transform-style: preserve-3d; transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .35s ease-out; will-change: transform; }
+.pb-bus { transform: translateX(-50%); animation: pbDriveIn 1.4s cubic-bezier(.2,.8,.2,1) both; filter: drop-shadow(0 14px 12px rgba(21,34,38,.22)); }
+.pb.driving .pb-bus { animation: pbDriveIn 1.4s cubic-bezier(.2,.8,.2,1) both, pbBob 1.6s ease-in-out 1.4s infinite; }
+.pb-shadow { position: absolute; left: 6%; right: 6%; bottom: -3%; height: 9%; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(21,34,38,.35), rgba(21,34,38,0) 70%); filter: blur(3px); }
+.pb-wheel { animation: spin .9s linear 3; will-change: transform; }
+.pb.driving .pb-wheel { animation: spin 1.1s linear infinite; }
+.pb-road { background-image: linear-gradient(90deg, rgb(var(--line-strong)) 0 22px, transparent 22px 44px); background-size: 44px 1px; opacity: .7; }
+.pb.driving .pb-road { animation: pbRoad 1.1s linear infinite; }
+.pb-scenery.moving { animation: pbScenery 18s linear infinite; }
+.vcard:hover .pb-wheel { animation: spin .7s linear infinite; }
+.vcard:hover .pb-road { animation: pbRoad .7s linear infinite; }
+.vcard:hover .pb-scenery { animation: pbScenery 18s linear infinite; }
+
 @media (prefers-reduced-motion: reduce) {
+  .pb-bus, .pb-wheel, .pb-road, .pb-scenery { animation: none !important; }
+  .pb-stage { transform: none !important; }
   .price-hero::after, .check-pop, .mini-bus, .mini-bus .wheel { animation: none !important; }
   .rule-bar { transform: none !important; transition: none !important; }
   .bus-art.driving .scenery,

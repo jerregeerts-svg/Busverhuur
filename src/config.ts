@@ -42,6 +42,8 @@ export interface VehicleInfo {
   tagline: string;
   desc: string;
   specs: string[];
+  /** Echte foto (uitgesneden) met losse wielen; zonder foto wordt de illustratie gebruikt */
+  photo?: { body: string; ratio: number; wheels: { src: string; x: number; y: number; r: number }[] };
 }
 
 /** Presentatie-info per voertuig (de beschikbaarheid komt uit Supabase). */
@@ -55,6 +57,13 @@ export const VEHICLES: Record<VehicleId, VehicleInfo> = {
     tagline: "Compacte rolstoelbus",
     desc: "Ideaal voor kleine gezelschappen en vervoer van een rolstoelgebruiker. Uitgerust met oprijplaat, rolstoelvastzetsysteem en verlaagde vloer.",
     specs: ["5 personen incl. bestuurder", "1 rolstoelplaats", "Oprijplaat achter", "Airco & navigatie", "Automaat", "Rijbewijs B"],
+    photo: {
+      body: "/img/doblo-body.webp", ratio: 1400 / 632,
+      wheels: [
+        { src: "/img/doblo-wheel-rear.webp", x: 16.07, y: 82.3, r: 6.64 },
+        { src: "/img/doblo-wheel-front.webp", x: 86.43, y: 79.1, r: 6.64 },
+      ],
+    },
   },
   talento: {
     id: "talento",
