@@ -8,6 +8,7 @@ import { Pricing } from "@/pages/Pricing";
 import { Book } from "@/pages/Book";
 import { Contact } from "@/pages/Contact";
 import { Account } from "@/pages/Account";
+import { Admin } from "@/pages/Admin";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
               <Route path="/boeken" element={<Book />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/account" element={<Account />} />
+              <Route path="/beheer" element={<Admin />} />
               <Route path="*" element={<Home />} />
             </Route>
           </Routes>

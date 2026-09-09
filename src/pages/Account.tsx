@@ -48,7 +48,7 @@ export function Account() {
     <div className="wrap">
       <div className="flex justify-between items-end gap-5 flex-wrap mb-[26px]">
         <div><span className="eyebrow">Mijn account</span><h2>Goedendag, {user.full_name.split(" ")[0]}</h2><p className="text-ink2 text-[.86rem]">Tagnummer <strong className="num">{user.tag_number}</strong>{user.organisation ? ` · ${user.organisation}` : ""}</p></div>
-        <div className="flex gap-2.5 flex-wrap"><Link to="/boeken" className="btn btn-primary">Nieuwe rit boeken</Link><button className="btn btn-ghost" onClick={async () => { await api.signOut(); nav("/"); toast("U bent uitgelogd"); }}>Uitloggen</button></div>
+        <div className="flex gap-2.5 flex-wrap">{user.is_admin && <Link to="/beheer" className="btn btn-brand">Beheer</Link>}<Link to="/boeken" className="btn btn-primary">Nieuwe rit boeken</Link><button className="btn btn-ghost" onClick={async () => { await api.signOut(); nav("/"); toast("U bent uitgelogd"); }}>Uitloggen</button></div>
       </div>
 
       {user.is_blocked && <Notice kind="bad" className="mb-5">Uw account is geblokkeerd. Neem contact met ons op om weer te kunnen boeken.</Notice>}
@@ -121,6 +121,9 @@ function RegisterModal({ b, onClose, onDone }: { b: Booking; onClose: () => void
   const late = b.phase === "overdue";
   const [start, setStart] = useState(""); const [end, setEnd] = useState("");
   const [err, setErr] = useState(""); const [busy, setBusy] = useState(false);
+  const [expected, setExpected] = useState<number | null>(null);
+  useEffect(() => { api.lastEndKm(b.vehicle_id, `${b.date}T${b.time_to}`).then(setExpected).catch(() => setExpected(null)); }, [b]);
+  const mismatch = expected !== null && start !== "" && +start !== expected;
   const km = start && end && +end > +start ? +end - +start : 0;
 
   async function submit(e: FormEvent<HTMLFormElement>) {
@@ -146,7 +149,7 @@ function RegisterModal({ b, onClose, onDone }: { b: Booking; onClose: () => void
           <label className="field req"><span>Naam chauffeur</span><input name="driver" required defaultValue={b.driver_name} /></label>
           <label className="field req"><span>Datum rit</span><input name="date" type="date" required defaultValue={b.date} max={toIso(today())} /></label>
           <label className="field req sm:col-span-2"><span>Bestemming</span><input name="destination" required defaultValue={b.destination} /></label>
-          <label className="field req"><span>Beginstand teller (km)</span><input type="number" inputMode="numeric" required min={0} value={start} onChange={(e) => setStart(e.target.value)} placeholder="bijv. 48262" /></label>
+          <label className="field req"><span>Beginstand teller (km)</span><input type="number" inputMode="numeric" required min={0} value={start} onChange={(e) => setStart(e.target.value)} placeholder={expected ? String(expected) : "bijv. 48262"} />{expected !== null && <span className={`hint ${mismatch ? "!text-warn font-semibold" : ""}`}>{mismatch ? `Let op: de vorige rit eindigde op ${expected.toLocaleString("nl-NL")} km. Controleer de stand; een afwijking wordt gemeld aan de beheerder.` : `Vorige rit eindigde op ${expected.toLocaleString("nl-NL")} km.`}</span>}</label>
           <label className="field req"><span>Eindstand teller (km)</span><input type="number" inputMode="numeric" required min={0} value={end} onChange={(e) => setEnd(e.target.value)} placeholder="bijv. 48380" /></label>
           <label className="field sm:col-span-2"><span>Bijzonderheden <span className="hint">(optioneel)</span></span><textarea name="notes" rows={2} placeholder="Schade, storing, tankbeurt, gevonden voorwerpen…" /></label>
           <div className="sm:col-span-2 bg-surface2 rounded-md px-4 py-3.5 grid grid-cols-3 gap-2.5 text-center">

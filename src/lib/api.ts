@@ -4,7 +4,7 @@
  * - Zonder: demo-modus in de browser (localStorage), zodat de site
  *   al volledig te bekijken en te testen is vóór het Supabase-account er is.
  */
-import { supabase, SUPABASE_CONFIGURED, type Booking, type Profile, type Settings } from "./supabase";
+import { supabase, SUPABASE_CONFIGURED, type AdminBooking, type Booking, type ContactRequest, type Profile, type Settings, type VehicleBlock } from "./supabase";
 import { CONFIG, type VehicleId } from "@/config";
 
 export interface RegisterInput {
@@ -48,7 +48,20 @@ export interface Api {
   cancelBooking(id: string): Promise<void>;
   registerRide(input: RegisterInput): Promise<Booking>;
   sendContact(input: ContactInput): Promise<void>;
+  lastEndKm(vehicle: VehicleId, before: string): Promise<number | null>;
   loginDemo?(): Promise<void>;
+  // ---- beheer ----
+  adminBookings(): Promise<AdminBooking[]>;
+  adminProfiles(): Promise<Profile[]>;
+  adminContacts(): Promise<ContactRequest[]>;
+  adminBlocks(): Promise<VehicleBlock[]>;
+  adminAddBlock(vehicle: VehicleId, date: string, reason: string): Promise<void>;
+  adminRemoveBlock(id: string): Promise<void>;
+  adminSetProfile(id: string, patch: Partial<Pick<Profile, "is_blocked" | "is_admin">>): Promise<void>;
+  adminSetBooking(id: string, patch: Partial<Pick<Booking, "fine_waived" | "admin_note" | "km_flagged">>): Promise<void>;
+  adminCancelBooking(id: string): Promise<void>;
+  adminSetContactHandled(id: string, handled: boolean): Promise<void>;
+  adminSaveSettings(s: Settings): Promise<void>;
 }
 
 /* ============================ Supabase ============================ */
@@ -83,8 +96,8 @@ const supabaseApi: Api = {
     if (error) throw new Error(vertaal(error.message));
   },
   async getSettings() {
-    const { data } = await supabase.from("settings").select("rate_per_km,fine,horizon_days,deadline_hours").eq("id", 1).single();
-    return data ?? { rate_per_km: CONFIG.ratePerKm, fine: CONFIG.fine, horizon_days: CONFIG.horizonDays, deadline_hours: CONFIG.deadlineHours };
+    const { data } = await supabase.from("settings").select("rate_per_km,fine,fine_enabled,horizon_days,deadline_hours,buffer_minutes").eq("id", 1).single();
+    return (data as Settings) ?? defaultSettings();
   },
   async getAvailability(vehicle) {
     const { data, error } = await supabase.from("availability").select("date").eq("vehicle_id", vehicle).gte("date", todayIso());
@@ -122,7 +135,26 @@ const supabaseApi: Api = {
     const { error } = await supabase.from("contact_requests").insert({ ...i, user_id: u.user?.id ?? null });
     if (error) throw new Error(vertaal(error.message));
   },
+  async lastEndKm(vehicle, before) {
+    const { data } = await supabase.rpc("last_end_km", { p_vehicle: vehicle, p_before: before });
+    return (data as number | null) ?? null;
+  },
+  async adminBookings() { const { data, error } = await supabase.from("admin_bookings").select("*").order("date", { ascending: false }); if (error) throw new Error(vertaal(error.message)); return data as AdminBooking[]; },
+  async adminProfiles() { const { data, error } = await supabase.from("profiles").select("*").order("created_at", { ascending: false }); if (error) throw new Error(vertaal(error.message)); return data as Profile[]; },
+  async adminContacts() { const { data, error } = await supabase.from("contact_requests").select("*").order("created_at", { ascending: false }); if (error) throw new Error(vertaal(error.message)); return data as ContactRequest[]; },
+  async adminBlocks() { const { data, error } = await supabase.from("vehicle_blocks").select("*").gte("date", todayIso()).order("date"); if (error) throw new Error(vertaal(error.message)); return data as VehicleBlock[]; },
+  async adminAddBlock(vehicle, date, reason) { const { error } = await supabase.from("vehicle_blocks").insert({ vehicle_id: vehicle, date, reason }); if (error) throw new Error(vertaal(error.message)); },
+  async adminRemoveBlock(id) { const { error } = await supabase.from("vehicle_blocks").delete().eq("id", id); if (error) throw new Error(vertaal(error.message)); },
+  async adminSetProfile(id, patch) { const { error } = await supabase.from("profiles").update(patch).eq("id", id); if (error) throw new Error(vertaal(error.message)); },
+  async adminSetBooking(id, patch) { const { error } = await supabase.from("bookings").update(patch).eq("id", id); if (error) throw new Error(vertaal(error.message)); },
+  async adminCancelBooking(id) { const { error } = await supabase.rpc("admin_cancel_booking", { p_booking: id }); if (error) throw new Error(vertaal(error.message)); },
+  async adminSetContactHandled(id, handled) { const { error } = await supabase.from("contact_requests").update({ handled }).eq("id", id); if (error) throw new Error(vertaal(error.message)); },
+  async adminSaveSettings(st) { const { error } = await supabase.from("settings").update({ ...st, updated_at: new Date().toISOString() }).eq("id", 1); if (error) throw new Error(vertaal(error.message)); },
 };
+
+function defaultSettings(): Settings {
+  return { rate_per_km: CONFIG.ratePerKm, fine: CONFIG.fine, fine_enabled: CONFIG.fineEnabled, horizon_days: CONFIG.horizonDays, deadline_hours: CONFIG.deadlineHours, buffer_minutes: CONFIG.bufferMinutes };
+}
 
 async function fetchProfile(id: string): Promise<Profile | null> {
   const { data } = await supabase.from("profiles").select("*").eq("id", id).single();
@@ -165,7 +197,7 @@ function mk(p: Partial<Booking>): Booking {
   return withPhase({
     id: crypto.randomUUID(), ref: rnd(), user_id: "demo", vehicle_id: "doblo", date: todayIso(), time_from: "09:00:00", time_to: "17:00:00",
     driver_name: "", destination: "", passengers: null, wheelchair: false, notes: null, status: "planned", start_km: null, end_km: null, km: null,
-    fine_applied: false, fine_waived: false, registered_at: null, reg_driver_name: null, reg_destination: null, reg_date: null,
+    fine_applied: false, fine_waived: false, registered_at: null, reg_driver_name: null, reg_destination: null, reg_date: null, expected_start_km: null, km_flagged: false, admin_note: null,
     created_at: new Date().toISOString(), ends_at: "", deadline_at: "", phase: "planned", ...p,
   });
 }
@@ -208,7 +240,7 @@ const demoApi: Api = {
   },
   async signOut() { const s = loadDemo(); s.user = null; s.bookings = []; saveDemo(s); listeners.forEach((l) => l(null)); },
   async resetPassword() { await delay(); },
-  async getSettings() { return { rate_per_km: CONFIG.ratePerKm, fine: CONFIG.fine, horizon_days: CONFIG.horizonDays, deadline_hours: CONFIG.deadlineHours }; },
+  async getSettings() { return defaultSettings(); },
   async getAvailability(vehicle) {
     const s = loadDemo();
     return [...s.blocks[vehicle].map(addDays), ...s.bookings.filter((b) => b.vehicle_id === vehicle && b.status !== "cancelled").map((b) => b.date)];
@@ -236,10 +268,26 @@ const demoApi: Api = {
     const ph = withPhase(b).phase;
     if (ph === "planned") throw new Error("De rit is nog niet afgelopen.");
     if (i.endKm <= i.startKm) throw new Error("De eindstand moet hoger zijn dan de beginstand.");
-    Object.assign(b, { status: "done", start_km: i.startKm, end_km: i.endKm, km: i.endKm - i.startKm, reg_driver_name: i.driver, reg_destination: i.destination, reg_date: i.date, fine_applied: ph === "overdue", registered_at: new Date().toISOString() });
+    const expected = await demoApi.lastEndKm(b.vehicle_id, `${b.date}T${b.time_to}`);
+    Object.assign(b, { status: "done", start_km: i.startKm, end_km: i.endKm, km: i.endKm - i.startKm, reg_driver_name: i.driver, reg_destination: i.destination, reg_date: i.date, fine_applied: CONFIG.fineEnabled && ph === "overdue", registered_at: new Date().toISOString(), expected_start_km: expected, km_flagged: expected !== null && expected !== i.startKm });
     saveDemo(s); return withPhase(b);
   },
   async sendContact() { await delay(400); },
+  async lastEndKm(vehicle, before) {
+    const done = loadDemo().bookings.filter((b) => b.vehicle_id === vehicle && b.status === "done" && b.end_km && `${b.date}T${b.time_to}` < before).sort((a, b) => (`${a.date}T${a.time_to}` < `${b.date}T${b.time_to}` ? 1 : -1));
+    return done[0]?.end_km ?? null;
+  },
+  async adminBookings() { const s = loadDemo(); const u = s.user!; return s.bookings.map(withPhase).map((b) => ({ ...b, customer_name: u.full_name, customer_email: u.email, customer_phone: u.phone, customer_tag: u.tag_number, customer_org: u.organisation })); },
+  async adminProfiles() { const u = loadDemo().user; return u ? [u] : []; },
+  async adminContacts() { return []; },
+  async adminBlocks() { const s = loadDemo(); return Object.entries(s.blocks).flatMap(([v, days]) => days.map((d) => ({ id: `${v}-${d}`, vehicle_id: v, date: addDays(d), reason: "Onderhoud (demo)" }))); },
+  async adminAddBlock(vehicle, date) { const s = loadDemo(); const off = Math.round((new Date(date + "T00:00").getTime() - new Date(todayIso() + "T00:00").getTime()) / 86400e3); s.blocks[vehicle].push(off); saveDemo(s); },
+  async adminRemoveBlock(id) { const s = loadDemo(); const [v, d] = id.split("-"); s.blocks[v as VehicleId] = s.blocks[v as VehicleId].filter((x) => String(x) !== d); saveDemo(s); },
+  async adminSetProfile(_id, patch) { const s = loadDemo(); if (s.user) Object.assign(s.user, patch); saveDemo(s); },
+  async adminSetBooking(id, patch) { const s = loadDemo(); const b = s.bookings.find((x) => x.id === id); if (b) Object.assign(b, patch); saveDemo(s); },
+  async adminCancelBooking(id) { const s = loadDemo(); const b = s.bookings.find((x) => x.id === id); if (b) b.status = "cancelled"; saveDemo(s); },
+  async adminSetContactHandled() { /* demo */ },
+  async adminSaveSettings(st) { Object.assign(CONFIG, { ratePerKm: st.rate_per_km, fine: st.fine, fineEnabled: st.fine_enabled, horizonDays: st.horizon_days, deadlineHours: st.deadline_hours, bufferMinutes: st.buffer_minutes }); },
 };
 
 export const api: Api = SUPABASE_CONFIGURED ? supabaseApi : demoApi;

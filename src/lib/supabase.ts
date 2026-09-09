@@ -47,6 +47,10 @@ export interface Booking {
   reg_driver_name: string | null;
   reg_destination: string | null;
   reg_date: string | null;
+  reg_notes?: string | null;
+  expected_start_km: number | null;
+  km_flagged: boolean;
+  admin_note: string | null;
   created_at: string;
   // uit de view my_bookings
   ends_at: string;
@@ -57,6 +61,24 @@ export interface Booking {
 export interface Settings {
   rate_per_km: number;
   fine: number;
+  fine_enabled: boolean;
   horizon_days: number;
   deadline_hours: number;
+  buffer_minutes: number;
 }
+
+export interface AdminBooking extends Booking {
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string | null;
+  customer_tag: string;
+  customer_org: string | null;
+}
+
+export interface ContactRequest {
+  id: string; name: string; email: string; phone: string | null; subject: string; message: string;
+  wanted_date: string | null; vehicle_id: string | null; time_from: string | null; time_to: string | null;
+  destination: string | null; handled: boolean; created_at: string;
+}
+
+export interface VehicleBlock { id: string; vehicle_id: string; date: string; reason: string | null }

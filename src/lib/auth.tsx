@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { api } from "./api";
 import type { Profile } from "./supabase";
+import { applySettings } from "@/config";
 
 interface AuthCtx {
   user: Profile | null;
@@ -20,7 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refresh = useCallback(async () => { setUser(await api.getSession()); }, []);
 
   useEffect(() => {
-    api.getSession().then((u) => { setUser(u); setLoading(false); });
+    Promise.all([api.getSession(), api.getSettings().catch(() => null)]).then(([u, s]) => { if (s) applySettings(s); setUser(u); setLoading(false); });
     return api.onAuthChange(setUser);
   }, []);
 

@@ -16,9 +16,11 @@ export const CONFIG = {
   ratePerKm: 0.53,
   /** Administratiekosten wanneer een rit niet op tijd wordt geregistreerd */
   fine: 20,
-  /** Boetesysteem aan/uit. Uit = geen boete-teksten op de site en geen boete bij late registratie.
-   *  Zet ook `fine` in de Supabase-tabel `settings` op 0 (of terug op 20) zodat de database hetzelfde doet. */
+  /** Boetesysteem aan/uit. Wordt bij het laden overschreven door de tabel `settings` in Supabase
+   *  (aan/uit te zetten in het beheerdersdashboard → Instellingen). */
   fineEnabled: false,
+  /** Minimale tijd (minuten) tussen twee boekingen van dezelfde bus; komt ook uit `settings`. */
+  bufferMinutes: 0,
   /** Hoeveel dagen vooruit klanten online mogen boeken */
   horizonDays: 14,
   /** Uren na de terugbrengtijd waarbinnen de rit geregistreerd moet zijn */
@@ -65,3 +67,13 @@ export const VEHICLES: Record<VehicleId, VehicleInfo> = {
     specs: ["9 personen incl. bestuurder", "Geen rolstoelvervoer", "Grote bagageruimte", "Airco & cruise control", "Handgeschakeld", "Rijbewijs B"],
   },
 };
+
+/** Overschrijft de standaardwaarden met wat in Supabase (tabel settings) staat. */
+export function applySettings(s: { rate_per_km: number; fine: number; fine_enabled: boolean; horizon_days: number; deadline_hours: number; buffer_minutes: number }) {
+  CONFIG.ratePerKm = Number(s.rate_per_km);
+  CONFIG.fine = Number(s.fine);
+  CONFIG.fineEnabled = !!s.fine_enabled;
+  CONFIG.horizonDays = Number(s.horizon_days);
+  CONFIG.deadlineHours = Number(s.deadline_hours);
+  CONFIG.bufferMinutes = Number(s.buffer_minutes ?? 0);
+}

@@ -46,7 +46,7 @@ export function Layout() {
           </ul>
           <div className="flex gap-2 items-center">
             {user ? (
-              <Link to="/account" className="btn btn-ghost btn-sm">Mijn ritten {openCount > 0 && <span className="tag bg-bad text-white px-[7px] py-px">{openCount}</span>}</Link>
+              <>{user.is_admin && <Link to="/beheer" className="btn btn-brand btn-sm">Beheer</Link>}<Link to="/account" className="btn btn-ghost btn-sm">Mijn ritten {openCount > 0 && <span className="tag bg-bad text-white px-[7px] py-px">{openCount}</span>}</Link></>
             ) : (
               <button className="btn btn-ghost btn-sm" onClick={() => openAuth("login")}>Inloggen</button>
             )}
