@@ -71,14 +71,18 @@ export function Tag({ kind, children }: { kind: "brand" | "soft" | "ok" | "warn"
 export function BusArt({ wide, wheelchair }: { wide: boolean; wheelchair: boolean }) {
   const x = wide ? 20 : 50, w = wide ? 260 : 200;
   return (
-    <svg viewBox="0 0 320 130" fill="none" aria-hidden="true" className="w-[70%] h-auto">
+    <svg viewBox="0 0 320 130" fill="none" aria-hidden="true" className="w-[70%] h-auto bus-art">
+      <line x1="0" y1="121" x2="320" y2="121" className="road stroke-lineStrong" strokeWidth="2" />
+      <g className="bus">
       <rect x={x} y="30" width={w} height="70" rx="14" className="fill-brand" />
       <rect x={x + 16} y="42" width={wide ? 170 : 120} height="30" rx="6" className="fill-brandSoft" opacity=".9" />
       <path d={`M${wide ? 216 : 196} 42h${wide ? 40 : 36}l12 14v16h-${wide ? 52 : 48}z`} className="fill-brandSoft" opacity=".9" />
       <rect x={x} y="88" width={w} height="12" rx="4" className="fill-brandDeep" />
-      <circle cx={wide ? 80 : 100} cy="102" r="16" className="fill-ink" /><circle cx={wide ? 80 : 100} cy="102" r="7" className="fill-surface2" />
-      <circle cx={wide ? 230 : 210} cy="102" r="16" className="fill-ink" /><circle cx={wide ? 230 : 210} cy="102" r="7" className="fill-surface2" />
+      {[wide ? 80 : 100, wide ? 230 : 210].map((cx) => (
+        <g key={cx} className="wheel"><circle cx={cx} cy="102" r="16" className="fill-ink" /><circle cx={cx} cy="102" r="7" className="fill-surface2" /><path d={`M${cx} 86v6M${cx} 112v6M${cx - 16} 102h6M${cx + 10} 102h6`} className="stroke-surface2" strokeWidth="2" /></g>
+      ))}
       {wheelchair && (<><circle cx="290" cy="60" r="18" className="fill-accent" /><g className="stroke-accentInk" strokeWidth="2.2" fill="none" strokeLinecap="round"><circle cx="287" cy="66" r="6" /><path d="M287 52v8h7l4 6" /><circle cx="287" cy="49" r="2" /></g></>)}
+      </g>
     </svg>
   );
 }
