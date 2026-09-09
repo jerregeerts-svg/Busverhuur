@@ -62,15 +62,15 @@ export const VEHICLES: Record<VehicleId, VehicleInfo> = {
     photo: {
       body: "/img/doblo-body.webp", ratio: 1400 / 632,
       wheels: [
-        { src: "/img/doblo-wheel-rear.webp", x: 15.47, y: 82.69, r: 6.7 },
-        { src: "/img/doblo-wheel-front.webp", x: 86.44, y: 78.13, r: 6.7 },
+        { src: "/img/doblo-wheel-rear.webp", x: 15.47, y: 82.69, r: 6.9 },
+        { src: "/img/doblo-wheel-front.webp", x: 86.44, y: 78.13, r: 6.9 },
       ],
     },
     toon: {
       body: "/img/doblo-toon-body.webp", ratio: 976 / 420,
       wheels: [
-        { src: "/img/doblo-toon-wheel-rear.webp", x: 16.29, y: 84.23, r: 6.4 },
-        { src: "/img/doblo-toon-wheel-front.webp", x: 85.39, y: 79.86, r: 6.4 },
+        { src: "/img/doblo-toon-wheel-rear.webp", x: 16.29, y: 84.23, r: 6.6 },
+        { src: "/img/doblo-toon-wheel-front.webp", x: 85.39, y: 79.86, r: 6.6 },
       ],
     },
   },
