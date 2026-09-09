@@ -4,6 +4,9 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # De publishable/anon key is bedoeld om in de browser te staan; de echte beveiliging zit in de RLS-regels van Supabase.
+  VITE_SUPABASE_URL = "https://bjaihfjkfypbkfrgdpmd.supabase.co"
+  VITE_SUPABASE_ANON_KEY = "sb_publishable_P-G8K3wb5jElXl0pLT3dKw_exqpX790"
 
 [[redirects]]
   from = "/*"
