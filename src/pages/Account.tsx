@@ -7,7 +7,7 @@ import type { Booking } from "@/lib/supabase";
 import { eur, fmtDate, hhmm, hoursLeft, toIso, today } from "@/lib/format";
 import { Modal, Notice, Tag, useToast } from "@/components/ui";
 
-type TabKey = "open" | "planned" | "done";
+type TabKey = "open" | "planned" | "done" | "cancelled";
 
 export function Account() {
   const { user, loading, openAuth } = useAuth();
@@ -28,6 +28,7 @@ export function Account() {
   const open = rows.filter((b) => b.phase === "open" || b.phase === "overdue");
   const planned = rows.filter((b) => b.phase === "planned").sort((a, b) => (a.date < b.date ? -1 : 1));
   const done = rows.filter((b) => b.phase === "done");
+  const cancelled = rows.filter((b) => b.phase === "cancelled");
   const hasFine = (b: Booking) => CONFIG.fineEnabled && b.fine_applied && !b.fine_waived;
   const kmYear = done.filter((b) => b.date.startsWith(String(new Date().getFullYear()))).reduce((s, b) => s + (b.km ?? 0), 0);
   const fines = done.filter(hasFine).length;
@@ -39,7 +40,7 @@ export function Account() {
     try { await api.cancelBooking(b.id); toast("Rit " + b.ref + " geannuleerd"); reload(); } catch (e) { toast((e as Error).message); }
   }
 
-  const list = tab === "open" ? open : tab === "planned" ? planned : done;
+  const list = tab === "open" ? open : tab === "planned" ? planned : tab === "done" ? done : cancelled;
   const TabBtn = ({ k, label, count, bad }: { k: TabKey; label: string; count: number; bad?: boolean }) => (
     <button onClick={() => setTab(k)} className={`bg-transparent border-0 border-b-2 -mb-px px-3.5 py-2.5 font-bold ${tab === k ? "text-ink border-accent" : "text-ink2 border-transparent"}`}>{label}<span className={`inline-block min-w-5 px-1.5 py-px rounded-full text-[.75rem] ml-1.5 text-center ${bad && count ? "bg-bad text-white" : "bg-surface2"}`}>{count}</span></button>
   );
@@ -67,11 +68,11 @@ export function Account() {
         ))}
       </div>
 
-      <div className="flex gap-1 border-b border-line mb-[18px]"><TabBtn k="open" label="Te registreren" count={open.length} bad /><TabBtn k="planned" label="Gepland" count={planned.length} /><TabBtn k="done" label="Afgerond" count={done.length} /></div>
+      <div className="flex gap-1 border-b border-line mb-[18px]"><TabBtn k="open" label="Te registreren" count={open.length} bad /><TabBtn k="planned" label="Gepland" count={planned.length} /><TabBtn k="done" label="Afgerond" count={done.length} /><TabBtn k="cancelled" label="Geannuleerd" count={cancelled.length} /></div>
 
       <div className="overflow-x-auto bg-surface border border-line rounded-lg">
         {list.length === 0 ? (
-          <div className="p-10 text-center text-ink2">{tab === "open" ? "Alles is geregistreerd. Zo houden we het graag." : tab === "planned" ? <>Geen geplande ritten. <Link to="/boeken">Boek een rit →</Link></> : "Nog geen afgeronde ritten."}</div>
+          <div className="p-10 text-center text-ink2">{tab === "open" ? "Alles is geregistreerd. Zo houden we het graag." : tab === "planned" ? <>Geen geplande ritten. <Link to="/boeken">Boek een rit →</Link></> : tab === "done" ? "Nog geen afgeronde ritten." : "Geen geannuleerde ritten."}</div>
         ) : (
           <table className="w-full border-collapse text-[.9rem] min-w-[900px]">
             <thead><tr>{["Rit", "Voertuig", "Chauffeur", "Bestemming", "Kilometers", "Bedrag", "Status", ""].map((h, i) => <th key={i} className={`text-left text-[.72rem] tracking-[.08em] uppercase text-ink3 px-4 py-3 border-b border-line font-bold ${i === 4 || i === 5 ? "text-right" : ""}`}>{h}</th>)}</tr></thead>
@@ -87,7 +88,7 @@ export function Account() {
                     <td>{b.reg_destination ?? b.destination}</td>
                     <td className="text-right num">{b.km ? `${b.km} km` : "—"}</td>
                     <td className="text-right num">{b.phase === "done" ? <>{eur(cost(b))}{hasFine(b) && <div className="text-[.82rem] text-ink2">incl. {eur(CONFIG.fine)}</div>}</> : b.phase === "overdue" && CONFIG.fineEnabled ? <>{eur(CONFIG.fine)}<div className="text-[.82rem] text-ink2">+ km volgt</div></> : "—"}</td>
-                    <td>{b.phase === "planned" ? <Tag kind="soft">Gepland</Tag> : b.phase === "open" ? <Tag kind="warn">Registratie open · {Math.max(1, Math.floor(h))} u</Tag> : b.phase === "overdue" ? <Tag kind="bad">{CONFIG.fineEnabled ? `Te laat · ${eur(CONFIG.fine)}` : "Nog invullen"}</Tag> : <Tag kind="ok">Afgerond</Tag>}</td>
+                    <td>{b.phase === "planned" ? <Tag kind="soft">Gepland</Tag> : b.phase === "open" ? <Tag kind="warn">Registratie open · {Math.max(1, Math.floor(h))} u</Tag> : b.phase === "overdue" ? <Tag kind="bad">{CONFIG.fineEnabled ? `Te laat · ${eur(CONFIG.fine)}` : "Nog invullen"}</Tag> : b.phase === "cancelled" ? <Tag kind="soft">Geannuleerd</Tag> : <Tag kind="ok">Afgerond</Tag>}</td>
                     <td className="text-right whitespace-nowrap">
                       {b.phase === "planned" && <button className="btn btn-ghost btn-sm" onClick={() => cancel(b)}>Annuleren</button>}
                       {b.phase === "open" && <button className="btn btn-primary btn-sm" onClick={() => setReg(b)}>Kilometers invullen</button>}
