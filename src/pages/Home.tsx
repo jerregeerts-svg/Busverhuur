@@ -72,7 +72,7 @@ export function Home() {
 
       <section className="mt-[72px]">
         <Reveal className="flex flex-col gap-2 mb-7 max-w-[640px]"><span className="eyebrow">Onze bussen</span><h2>Twee bussen, voor elk gezelschap de juiste.</h2></Reveal>
-        <Reveal stagger className="grid md:grid-cols-2 gap-6">{Object.values(VEHICLES).map((v) => <VehicleCard key={v.id} v={v} />)}</Reveal>
+        <Reveal stagger className="grid md:grid-cols-2 gap-6">{Object.values(VEHICLES).map((v) => <VehicleCard key={v.id} v={v} driving />)}</Reveal>
       </section>
 
       <section className="mt-[72px]">
