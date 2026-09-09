@@ -58,7 +58,7 @@ export const VEHICLES: Record<VehicleId, VehicleInfo> = {
     wheelchair: true,
     tagline: "Compacte rolstoelbus",
     desc: "Ideaal voor kleine gezelschappen en vervoer van een rolstoelgebruiker. Uitgerust met oprijplaat, rolstoelvastzetsysteem en verlaagde vloer.",
-    specs: ["5 personen incl. bestuurder", "1 rolstoelplaats", "Oprijplaat achter", "Airco & navigatie", "Automaat", "Rijbewijs B"],
+    specs: ["5 personen incl. bestuurder", "1 rolstoelplaats", "Oprijplaat achter", "Gehandicaptenparkeerkaart aanwezig", "Airco & navigatie", "Automaat", "Rijbewijs B"],
     photo: {
       body: "/img/doblo-body.webp", ratio: 1400 / 632,
       wheels: [
@@ -82,7 +82,7 @@ export const VEHICLES: Record<VehicleId, VehicleInfo> = {
     wheelchair: false,
     tagline: "Ruime 9-persoonsbus",
     desc: "Voor teams, families en verenigingen. Negen volwaardige zitplaatsen met gordels, veel bagageruimte en comfortabel op lange afstanden.",
-    specs: ["9 personen incl. bestuurder", "Geen rolstoelvervoer", "Grote bagageruimte", "Airco & cruise control", "Handgeschakeld", "Rijbewijs B"],
+    specs: ["9 personen incl. bestuurder", "Geen rolstoelvervoer", "Gehandicaptenparkeerkaart aanwezig", "Grote bagageruimte", "Airco & cruise control", "Handgeschakeld", "Rijbewijs B"],
   },
 };
 
