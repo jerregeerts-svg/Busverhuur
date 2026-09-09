@@ -76,17 +76,22 @@ export function Home() {
       </section>
 
       <section className="mt-[72px]">
-        <Reveal className="flex flex-col gap-2 mb-7 max-w-[640px]"><span className="eyebrow">Zo werkt het</span><h2>Van boeking tot afrekening in vier stappen.</h2></Reveal>
-        <Reveal stagger className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+        <Reveal className="flex flex-col gap-2 mb-8 max-w-[640px]"><span className="eyebrow">Zo werkt het</span><h2>Van boeking tot afrekening in vier stappen.</h2></Reveal>
+        <Reveal stagger className="steps grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {[
-            ["Account aanmaken", "Registreer eenmalig met uw gegevens en tagnummer. Daarna boekt u in een minuut."],
-            ["Rit boeken", `Kies bus, datum en tijd tot ${CONFIG.horizonDays} dagen vooruit. U krijgt direct een bevestiging per e-mail.`],
-            ["Rijden", "Haal de bus op, noteer de beginstand en geniet van de rit."],
-            ["Kilometers invullen, kosten zien", "Na de rit vult u chauffeur, bestemming en kilometerstand in en ziet u meteen wat de rit kost. Geen verrassingen achteraf."],
-          ].map(([t, d], i) => (
-            <div key={t} className="pt-3.5">
-              <span className="block font-display font-extrabold text-[2rem] text-accent mb-1.5 step-num">{String(i + 1).padStart(2, "0")}</span>
-              <h4 className="text-[1.02rem] font-bold mb-1.5">{t}</h4><p className="text-[.9rem] text-ink2">{d}</p>
+            { I: Icon.User, t: "Account aanmaken", d: "Registreer eenmalig met uw gegevens en tagnummer. Daarna boekt u in een minuut." },
+            { I: Icon.Calendar, t: "Rit boeken", d: `Kies bus, datum en tijd tot ${CONFIG.horizonDays} dagen vooruit. U krijgt direct een bevestiging per e-mail.` },
+            { I: Icon.Bus, t: "Rijden", d: "Haal de bus op, noteer de beginstand en geniet van de rit." },
+            { I: Icon.Check, t: "Kilometers invullen, kosten zien", d: "Na de rit vult u chauffeur, bestemming en kilometerstand in en ziet u meteen wat de rit kost. Geen verrassingen achteraf." },
+          ].map(({ I, t, d }, i) => (
+            <div key={t} className="step-card">
+              <span className="step-sheen" aria-hidden="true" />
+              <div className="flex items-center justify-between gap-3">
+                <span className="step-badge num">{String(i + 1).padStart(2, "0")}</span>
+                <span className="step-icon"><I className="w-[18px] h-[18px]" /></span>
+              </div>
+              <h4 className="step-title">{t}</h4>
+              <p className="step-desc">{d}</p>
             </div>
           ))}
         </Reveal>
