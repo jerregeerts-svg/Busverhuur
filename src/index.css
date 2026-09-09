@@ -139,12 +139,16 @@
 .pb-road { background-image: linear-gradient(90deg, rgb(var(--line-strong)) 0 22px, transparent 22px 44px); background-size: 44px 1px; opacity: .7; }
 .pb.driving .pb-road { animation: pbRoad 1.1s linear infinite; }
 .pb-scenery.moving { animation: pbScenery 18s linear infinite; }
+@keyframes pbToonRoad { to { transform: translateX(-52px); } }
+.pb-toon-road.moving { animation: pbToonRoad .9s linear infinite; }
+.pb.toon .pb-bus { bottom: 7%; width: 74%; filter: drop-shadow(0 10px 8px rgba(20,40,20,.35)); }
+.pb.toon .pb-shadow { background: radial-gradient(ellipse at center, rgba(20,30,20,.45), rgba(20,30,20,0) 70%); }
 .vcard:hover .pb-wheel { animation: spin .7s linear infinite; }
 .vcard:hover .pb-road { animation: pbRoad .7s linear infinite; }
 .vcard:hover .pb-scenery { animation: pbScenery 18s linear infinite; }
 
 @media (prefers-reduced-motion: reduce) {
-  .pb-bus, .pb-wheel, .pb-road, .pb-scenery { animation: none !important; }
+  .pb-bus, .pb-wheel, .pb-road, .pb-scenery, .pb-toon-road { animation: none !important; }
   .pb-stage { transform: none !important; }
   .price-hero::after, .check-pop, .mini-bus, .mini-bus .wheel { animation: none !important; }
   .rule-bar { transform: none !important; transition: none !important; }

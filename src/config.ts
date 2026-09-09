@@ -44,6 +44,8 @@ export interface VehicleInfo {
   specs: string[];
   /** Echte foto (uitgesneden) met losse wielen; zonder foto wordt de illustratie gebruikt */
   photo?: { body: string; ratio: number; wheels: { src: string; x: number; y: number; r: number }[] };
+  /** Getekende (cartoon) versie voor de voertuigenpagina */
+  toon?: { body: string; ratio: number; wheels: { src: string; x: number; y: number; r: number }[] };
 }
 
 /** Presentatie-info per voertuig (de beschikbaarheid komt uit Supabase). */
@@ -62,6 +64,13 @@ export const VEHICLES: Record<VehicleId, VehicleInfo> = {
       wheels: [
         { src: "/img/doblo-wheel-rear.webp", x: 16.07, y: 82.3, r: 6.64 },
         { src: "/img/doblo-wheel-front.webp", x: 86.43, y: 79.1, r: 6.64 },
+      ],
+    },
+    toon: {
+      body: "/img/doblo-toon-body.webp", ratio: 976 / 420,
+      wheels: [
+        { src: "/img/doblo-toon-wheel-rear.webp", x: 15.9, y: 83.5, r: 6.3 },
+        { src: "/img/doblo-toon-wheel-front.webp", x: 85.5, y: 80.9, r: 6.3 },
       ],
     },
   },
