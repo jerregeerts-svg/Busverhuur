@@ -69,7 +69,7 @@ export function AuthModal() {
                 <label className="field req"><span>Telefoonnummer</span><input type="tel" name="phone" required autoComplete="tel" /></label>
                 <label className="field"><span>Organisatie <span className="hint">(optioneel)</span></span><input name="organisation" placeholder="Vereniging, zorginstelling, bedrijf" /></label>
                 <label className="field req"><span>Wachtwoord</span><input type="password" name="password" required minLength={8} autoComplete="new-password" /><span className="hint">Minimaal 8 tekens</span></label>
-                <label className="flex gap-2.5 items-start text-[.9rem] text-ink2 sm:col-span-2"><input type="checkbox" name="agree" required className="mt-1" /><span>Ik ga akkoord met de <Link to="/tarieven" onClick={close}>huisregels</Link>, waaronder de verplichte ritregistratie na elke rit{CONFIG.fineEnabled && <> en de {eur(CONFIG.fine)} administratiekosten bij het niet registreren van een rit</>}.</span></label>
+                <label className="flex gap-2.5 items-start text-[.9rem] text-ink2 sm:col-span-2"><input type="checkbox" name="agree" required className="mt-1" /><span>Ik ga akkoord met de <Link to="/tarieven" onClick={close}>huisregels</Link>, en vul na elke rit zelf de kilometerstand in zodat mijn overzicht klopt{CONFIG.fineEnabled && <> (bij niet invullen geldt {eur(CONFIG.fine)} administratiekosten)</>}.</span></label>
               </div>
             )}
             {err && <p className="err mt-3">{err}</p>}

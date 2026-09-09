@@ -22,7 +22,7 @@ export function Home() {
     { I: Icon.Calendar, t: "Online boeken, 24/7", d: "Kies uw bus, datum en tijd. U ziet direct wat beschikbaar is en ontvangt meteen een bevestiging." },
     { I: Icon.Clock, t: "Eerlijke kilometerprijs", d: "Geen dagtarief of borg. U betaalt achteraf alleen de kilometers die op de teller staan." },
     { I: Icon.User, t: "Toegankelijk vervoer", d: "De Doblo is een volwaardige rolstoelbus met oprijplaat en vastzetsysteem." },
-    { I: Icon.Shield, t: "Eigen account", d: "Al uw ritten, kilometers en afrekeningen overzichtelijk bij elkaar in uw persoonlijke omgeving." },
+    { I: Icon.Shield, t: "Eigen account", d: "U ziet altijd precies wat u rijdt en betaalt: al uw ritten, kilometers en afrekeningen in uw eigen overzicht." },
   ];
 
   return (
@@ -82,7 +82,7 @@ export function Home() {
             ["Account aanmaken", "Registreer eenmalig met uw gegevens en tagnummer. Daarna boekt u in een minuut."],
             ["Rit boeken", `Kies bus, datum en tijd tot ${CONFIG.horizonDays} dagen vooruit. U krijgt direct een bevestiging per e-mail.`],
             ["Rijden", "Haal de bus op, noteer de beginstand en geniet van de rit."],
-            ["Kilometers invullen", "Na de rit vult u chauffeur, bestemming, datum en kilometerstand in. Wij sturen de afrekening."],
+            ["Kilometers invullen, kosten zien", "Na de rit vult u chauffeur, bestemming en kilometerstand in en ziet u meteen wat de rit kost. Geen verrassingen achteraf."],
           ].map(([t, d], i) => (
             <div key={t} className="pt-3.5">
               <span className="block font-display font-extrabold text-[2rem] text-accent mb-1.5 step-num">{String(i + 1).padStart(2, "0")}</span>
@@ -90,7 +90,7 @@ export function Home() {
             </div>
           ))}
         </Reveal>
-        <Notice kind="warn" className="mt-7 max-w-[720px] reveal is-in"><strong>Let op:</strong> ritregistratie is verplicht. Vul na elke rit binnen {CONFIG.deadlineHours} uur chauffeur, bestemming, datum en kilometerstand in.{CONFIG.fineEnabled && <> Niet geregistreerd? Dan rekenen wij <strong>{eur(CONFIG.fine)} administratiekosten per rit</strong>.</>}</Notice>
+        <Notice kind="info" className="mt-7 max-w-[720px] reveal is-in"><strong>Altijd inzicht:</strong> vul na elke rit binnen {CONFIG.deadlineHours} uur chauffeur, bestemming, datum en kilometerstand in — u ziet altijd precies wat u rijdt en betaalt, geen verrassingen achteraf.{CONFIG.fineEnabled && <> Niet geregistreerd? Dan rekenen wij <strong>{eur(CONFIG.fine)} administratiekosten per rit</strong>.</>}</Notice>
       </section>
 
       <Reveal as="section" className="mt-[72px]">

@@ -85,11 +85,11 @@ export function Pricing() {
       </div>
 
       <section className="mt-[72px]">
-        <Reveal className="flex flex-col gap-2 mb-7"><span className="eyebrow">Huisregels</span><h2>Waar u op moet letten</h2></Reveal>
+        <Reveal className="flex flex-col gap-2 mb-7 max-w-[640px]"><span className="eyebrow">Zo werkt het</span><h2>Altijd duidelijk wat u rijdt en betaalt.</h2><p className="text-ink2">Geen schattingen, geen naheffingen: u vult zelf de tellerstand in en ziet meteen het bedrag.</p></Reveal>
         <Reveal stagger className="grid md:grid-cols-3 gap-5">
           {[
-            ["Ritregistratie verplicht", <>Na elke rit vult u in uw account de <strong>naam van de chauffeur, de bestemming, de datum</strong> en de begin- en eindstand van de kilometerteller in.</>],
-            ...(CONFIG.fineEnabled ? [[`${eur(CONFIG.fine)} bij niet registreren`, <>Wordt de rit niet binnen {CONFIG.deadlineHours} uur na afloop geregistreerd, dan brengen wij {eur(CONFIG.fine)} administratiekosten per rit in rekening, bovenop de gereden kilometers.</>] as const] : [[`Binnen ${CONFIG.deadlineHours} uur invullen`, <>Registreer de rit binnen {CONFIG.deadlineHours} uur na de terugbrengtijd. Zo blijft de afrekening kloppend en kan de volgende klant direct op pad.</>] as const]),
+            ["U vult zelf de kilometers in", <>Na de rit noteert u in uw account de <strong>chauffeur, bestemming, datum</strong> en de begin- en eindstand van de teller. Dat kost een halve minuut, gewoon op uw telefoon.</>],
+            ...(CONFIG.fineEnabled ? [[`${eur(CONFIG.fine)} bij niet registreren`, <>Wordt de rit niet binnen {CONFIG.deadlineHours} uur na afloop geregistreerd, dan brengen wij {eur(CONFIG.fine)} administratiekosten per rit in rekening, bovenop de gereden kilometers.</>] as const] : [["Direct inzicht in de kosten", <>Zodra u de standen invult, ziet u meteen de gereden kilometers en het bedrag. Graag binnen {CONFIG.deadlineHours} uur na de rit, dan klopt het overzicht ook voor de volgende chauffeur.</>] as const]),
             [`Maximaal ${CONFIG.horizonDays} dagen vooruit`, <>Online boekt u tot twee weken vooruit. Ritten verder in de toekomst vraagt u aan via het <Link to="/contact?reden=lange-termijn">contactformulier</Link>; wij bevestigen die persoonlijk.</>],
           ].map(([tt, d], i) => (
             <div key={i} className="rule relative py-1 pl-[18px]"><span className="rule-bar" /><h4 className="text-base font-bold mb-1.5">{tt}</h4><p className="text-[.9rem] text-ink2">{d}</p></div>

@@ -129,8 +129,8 @@ export function Book() {
                   <dt>Tagnummer</dt><dd className="num">{user.tag_number}</dd>
                   {w.notes && <><dt>Opmerking</dt><dd>{w.notes}</dd></>}
                 </dl>
-                <Notice kind="warn" className="mt-[22px]">Registreer de rit <strong>binnen {CONFIG.deadlineHours} uur na {w.to}</strong> in uw account (chauffeur, bestemming, datum, km-standen).{CONFIG.fineEnabled && <> Niet geregistreerd = <strong>{eur(CONFIG.fine)} administratiekosten</strong> bovenop de kilometers.</>}</Notice>
-                <label className="flex gap-2.5 items-start text-[.9rem] text-ink2 mt-[18px]"><input type="checkbox" checked={w.agree} onChange={(e) => up({ agree: e.target.checked })} className="mt-1" /><span>Ik ga akkoord met de <Link to="/tarieven">huisregels en tarieven</Link>, inclusief de verplichte ritregistratie.</span></label>
+                <Notice kind="info" className="mt-[22px]">Na de rit vult u in uw account de kilometerstand in (graag <strong>binnen {CONFIG.deadlineHours} uur na {w.to}</strong>). U ziet dan meteen wat de rit heeft gekost.{CONFIG.fineEnabled && <> Wordt de rit niet ingevuld, dan rekenen wij {eur(CONFIG.fine)} administratiekosten.</>}</Notice>
+                <label className="flex gap-2.5 items-start text-[.9rem] text-ink2 mt-[18px]"><input type="checkbox" checked={w.agree} onChange={(e) => up({ agree: e.target.checked })} className="mt-1" /><span>Ik ga akkoord met de <Link to="/tarieven">tarieven en afspraken</Link>, en vul na de rit zelf de kilometerstand in.</span></label>
                 {err && <p className="err mt-3">{err}</p>}
                 <div className="flex justify-between mt-6 pt-5 border-t border-line gap-3">
                   <button className="btn btn-ghost" onClick={() => up({ step: 2 })}>← Terug</button>
@@ -144,7 +144,7 @@ export function Book() {
                 <div className="w-16 h-16 mx-auto mb-[18px] rounded-full bg-okSoft text-ok grid place-items-center"><Icon.Check className="w-8 h-8" /></div>
                 <h3 className="text-[1.6rem]">Uw rit is geboekt</h3>
                 <p className="text-ink2 mt-2">Boekingsnummer</p><div className="font-display font-extrabold text-[1.3rem] tracking-[.04em] num">{done.ref}</div>
-                <p className="text-ink2 mt-4 max-w-[38em] mx-auto">De boeking staat in uw account onder <strong>Mijn ritten</strong>. Vergeet niet na de rit uw kilometers in te vullen.</p>
+                <p className="text-ink2 mt-4 max-w-[38em] mx-auto">De boeking staat in uw account onder <strong>Mijn ritten</strong>. Vul na de rit uw kilometerstand in en zie meteen wat de rit heeft gekost.</p>
                 <div className="flex gap-3 justify-center mt-6 flex-wrap"><Link to="/account" className="btn btn-brand">Naar mijn ritten</Link><button className="btn btn-ghost" onClick={() => { setDone(null); setW({ step: 1, vehicle: "doblo", date: null, from: "10:00", to: "18:00", driver: "", dest: "", estKm: "", pers: "", wheelchair: false, notes: "", agree: false }); }}>Nog een rit boeken</button></div>
               </div>
             )}
