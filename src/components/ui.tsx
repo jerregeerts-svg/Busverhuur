@@ -68,11 +68,23 @@ export function Tag({ kind, children }: { kind: "brand" | "soft" | "ok" | "warn"
 }
 
 /* ---------- Bus-illustratie ---------- */
-export function BusArt({ wide, wheelchair }: { wide: boolean; wheelchair: boolean }) {
+export function BusArt({ wide, wheelchair, driving = false }: { wide: boolean; wheelchair: boolean; driving?: boolean }) {
   const x = wide ? 20 : 50, w = wide ? 260 : 200;
+  // Landschap dat voorbijtrekt (twee identieke helften van 400 breed voor een naadloze lus)
+  const scenery = (
+    <g className="scenery-half">
+      <path d="M0 96 C50 68 90 70 130 90 S210 58 270 88 S340 76 400 96 V150 H0 Z" className="fill-brandSoft" opacity=".7" />
+      <g className="fill-brand" opacity=".28">
+        <path d="M40 96 l8 -22 l8 22 z M52 96 l6 -14 l6 14 z" /><path d="M190 96 l7 -18 l7 18 z" /><path d="M322 96 l9 -26 l9 26 z M336 96 l6 -13 l6 13 z" />
+        <rect x="46" y="94" width="3" height="8" /><rect x="195" y="94" width="3" height="8" /><rect x="329" y="94" width="3" height="8" />
+      </g>
+      <g className="fill-surface" opacity=".9"><ellipse cx="90" cy="24" rx="18" ry="7" /><ellipse cx="102" cy="21" rx="12" ry="6" /><ellipse cx="290" cy="14" rx="16" ry="6" /><ellipse cx="302" cy="11" rx="10" ry="5" /></g>
+    </g>
+  );
   return (
-    <svg viewBox="0 0 320 130" fill="none" aria-hidden="true" className="w-[70%] h-auto bus-art">
-      <line x1="0" y1="121" x2="320" y2="121" className="road stroke-lineStrong" strokeWidth="2" />
+    <svg viewBox={driving ? "-40 -40 400 200" : "0 0 320 130"} fill="none" aria-hidden="true" className={driving ? "bus-art driving absolute inset-0 w-full h-full" : "w-[70%] h-auto bus-art"}>
+      {driving && <g className="scenery" transform="translate(-40 0)">{scenery}<g transform="translate(400 0)">{scenery}</g></g>}
+      <line x1="-40" y1="121" x2="360" y2="121" className="road stroke-lineStrong" strokeWidth="2" />
       <g className="bus">
       <rect x={x} y="30" width={w} height="70" rx="14" className="fill-brand" />
       <rect x={x + 16} y="42" width={wide ? 170 : 120} height="30" rx="6" className="fill-brandSoft" opacity=".9" />

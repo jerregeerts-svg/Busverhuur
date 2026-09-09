@@ -97,7 +97,19 @@
 .btn-pulse::after { content: ""; position: absolute; inset: -3px; border-radius: inherit; border: 2px solid rgb(var(--accent) / .55); animation: pulse 2.4s ease-out 1.5s infinite; pointer-events: none; }
 @keyframes pulse { 0% { transform: scale(.96); opacity: .9; } 70% { transform: scale(1.12); opacity: 0; } 100% { opacity: 0; } }
 
+/* Voertuigenpagina: rustig doorrijden */
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.5px); } }
+@keyframes sceneryScroll { from { transform: translateX(-40px); } to { transform: translateX(-440px); } }
+.bus-art.driving .bus { animation: driveIn 1.3s cubic-bezier(.2,.8,.2,1) both, bob 1.8s ease-in-out 1.3s infinite; }
+.bus-art.driving .wheel { animation: spin 1.4s linear infinite; }
+.bus-art.driving .road { animation: roadDash 1.4s linear infinite; }
+.bus-art.driving .scenery { animation: sceneryScroll 16s linear infinite; }
+.vcard:hover .bus-art.driving .bus { transform: none; }
+.vcard:hover .bus-art.driving .wheel { animation-duration: 1.4s; }
+.vcard:hover .bus-art.driving .road { animation-duration: 1.4s; }
+
 @media (prefers-reduced-motion: reduce) {
+  .bus-art.driving .scenery,
   .a-up, .a-float, .bus-art .bus, .bus-art .wheel, .bus-art .road, .btn-pulse::after, .step-num { animation: none !important; }
   .reveal, .reveal-stagger > * { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
