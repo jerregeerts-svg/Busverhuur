@@ -72,8 +72,11 @@ export function PhotoBus({ photo, driving = false, alt, toon = false }: { photo:
           <div className="pb-shadow" />
           <img src={photo.body} alt={alt} className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none" draggable={false} />
           {photo.wheels.map((w, i) => (
-            <img key={i} src={w.src} alt="" aria-hidden="true" draggable={false} className="pb-wheel absolute select-none pointer-events-none"
-              style={{ left: `${w.x - w.r}%`, top: `calc(${w.y}% - ${w.r}% * ${photo.ratio})`, width: `${w.r * 2}%`, aspectRatio: "1" }} />
+            <div key={i} aria-hidden="true" className="pb-wheel-wrap absolute select-none pointer-events-none"
+              style={{ left: `${w.x - w.r}%`, top: `calc(${w.y}% - ${w.r}% * ${photo.ratio})`, width: `${w.r * 2}%`, aspectRatio: "1" }}>
+              <img src={w.src} alt="" draggable={false} className="pb-wheel pb-wheel-ghost absolute inset-0 w-full h-full" />
+              <img src={w.src} alt="" draggable={false} className="pb-wheel absolute inset-0 w-full h-full" />
+            </div>
           ))}
         </div>
       </div>
