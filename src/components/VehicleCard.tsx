@@ -8,7 +8,7 @@ export function VehicleCard({ v, driving = false }: { v: VehicleInfo; driving?: 
   return (
     <article className="vcard bg-surface border border-line rounded-lg overflow-hidden flex flex-col">
       <div className={`aspect-[2/1] grid place-items-center relative overflow-hidden ${driving || v.photo ? "bg-gradient-to-b from-surface2 to-brandSoft" : "bg-gradient-to-br from-brandSoft to-surface2"}`}>
-        {driving && v.toon ? <PhotoBus photo={v.toon} driving toon alt={v.name} /> : v.photo ? <PhotoBus photo={v.photo} driving={driving} alt={v.name} /> : <BusArt wide={v.seats > 5} wheelchair={v.wheelchair} driving={driving} />}
+        {v.toon ? <PhotoBus photo={v.toon} driving={driving} toon alt={v.name} /> : v.photo ? <PhotoBus photo={v.photo} driving={driving} alt={v.name} /> : <BusArt wide={v.seats > 5} wheelchair={v.wheelchair} driving={driving} />}
         <span className="absolute top-3.5 left-3.5"><Tag kind="brand">{v.wheelchair ? "Rolstoelbus" : `${v.seats} personen`}</Tag></span>
       </div>
       <div className="p-[22px] flex flex-col gap-3.5 flex-1">
