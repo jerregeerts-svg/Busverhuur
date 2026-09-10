@@ -5,7 +5,7 @@ export function Vehicles() {
   return (
     <div className="wrap">
       <div className="flex flex-col gap-2 mb-7 max-w-[640px]"><span className="eyebrow">Voertuigen</span><h2>Onze bussen</h2><p className="text-ink2">Beide bussen zijn schoon, goed onderhouden en all-risk verzekerd. Rijden mag met een gewoon rijbewijs B.</p></div>
-      <div className="grid md:grid-cols-2 gap-6">{Object.values(VEHICLES).map((v) => <VehicleCard key={v.id} v={v} driving />)}</div>
+      <div className="grid md:grid-cols-2 gap-6">{Object.values(VEHICLES).map((v) => <VehicleCard key={v.id} v={v} driving toon />)}</div>
       <section className="mt-[72px]">
         <div className="mb-7"><h2>Inbegrepen bij elke huur</h2></div>
         <div className="grid md:grid-cols-3 gap-5">
