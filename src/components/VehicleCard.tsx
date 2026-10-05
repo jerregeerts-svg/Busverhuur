@@ -1,12 +1,15 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { CONFIG, type VehicleInfo } from "@/config";
 import { eur } from "@/lib/format";
 import { BusArt, Icon, Tag } from "./ui";
 import { PhotoBus } from "./PhotoBus";
+import { VehicleDetails } from "./VehicleDetails";
 
 export function VehicleCard({ v, driving = false, toon = false }: { v: VehicleInfo; driving?: boolean; toon?: boolean }) {
   /** Op de voertuigenpagina de getekende stijl, elders de echte foto. */
   const art = toon && v.toon ? { p: v.toon, toon: true } : v.photo ? { p: v.photo, toon: false } : v.toon ? { p: v.toon, toon: true } : null;
+  const [info, setInfo] = useState(false);
   return (
     <article className="vcard bg-surface border border-line rounded-lg overflow-hidden flex flex-col">
       <div className={`aspect-[2/1] grid place-items-center relative overflow-hidden ${driving || v.photo ? "bg-gradient-to-b from-surface2 to-brandSoft" : "bg-gradient-to-br from-brandSoft to-surface2"}`}>
@@ -23,11 +26,15 @@ export function VehicleCard({ v, driving = false, toon = false }: { v: VehicleIn
             return <div key={s} className="flex gap-2 items-center text-ink2"><I className={`w-4 h-4 shrink-0 ${neg ? "text-bad" : "text-brand"}`} /><span>{s}</span></div>;
           })}
         </div>
-        <div className="mt-auto flex justify-between items-center pt-3.5 border-t border-line">
+        <div className="mt-auto flex justify-between items-center gap-3 flex-wrap pt-3.5 border-t border-line">
           <div className="font-display font-extrabold text-[1.4rem] num">{eur(CONFIG.ratePerKm)} <small className="font-body font-semibold text-[.8rem] text-ink2">/ km</small></div>
-          <Link to={`/boeken?v=${v.id}`} className="btn btn-brand btn-sm">Boek de {v.short}</Link>
+          <div className="flex gap-2 flex-wrap">
+            <button type="button" className="btn btn-ghost btn-sm" onClick={() => setInfo(true)} aria-haspopup="dialog">Meer informatie</button>
+            <Link to={`/boeken?v=${v.id}`} className="btn btn-brand btn-sm">Boek de {v.short}</Link>
+          </div>
         </div>
       </div>
+      <VehicleDetails v={v} open={info} onClose={() => setInfo(false)} toon={toon} />
     </article>
   );
 }

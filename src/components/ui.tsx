@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 /* ---------- Iconen (inline SVG, geen library nodig) ---------- */
 const S = { width: 20, height: 20, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
@@ -33,7 +34,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 }
 
 /* ---------- Modal ---------- */
-export function Modal({ open, onClose, title, sub, children, labelledBy = "modal-title" }: { open: boolean; onClose: () => void; title: string; sub?: string; children: ReactNode; labelledBy?: string }) {
+export function Modal({ open, onClose, title, sub, children, labelledBy = "modal-title", wide = false }: { open: boolean; onClose: () => void; title: string; sub?: string; children: ReactNode; labelledBy?: string; wide?: boolean }) {
   useEffect(() => {
     if (!open) return;
     const h = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -42,15 +43,17 @@ export function Modal({ open, onClose, title, sub, children, labelledBy = "modal
     return () => { document.removeEventListener("keydown", h); document.body.style.overflow = ""; };
   }, [open, onClose]);
   if (!open) return null;
-  return (
+  // Via een portal in <body>, anders knipt een kaart met overflow/transform het venster af.
+  return createPortal(
     <div className="fixed inset-0 bg-[rgba(8,20,24,.55)] grid place-items-center z-50 p-5" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div role="dialog" aria-modal="true" aria-labelledby={labelledBy} className="bg-surface rounded-lg w-full max-w-[560px] max-h-[92vh] overflow-auto p-7 shadow-card relative">
+      <div role="dialog" aria-modal="true" aria-labelledby={labelledBy} className={`bg-surface rounded-lg w-full ${wide ? "max-w-[760px]" : "max-w-[560px]"} max-h-[92vh] overflow-auto p-7 shadow-card relative`}>
         <button onClick={onClose} aria-label="Sluiten" className="absolute top-3.5 right-3.5 bg-surface2 w-8 h-8 rounded-full text-ink2 grid place-items-center"><Icon.X className="w-4 h-4" /></button>
         <h3 id={labelledBy} className="text-[1.35rem] mb-1">{title}</h3>
         {sub && <p className="text-ink2 text-[.92rem] mb-5">{sub}</p>}
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

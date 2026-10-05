@@ -42,6 +42,15 @@ export interface VehicleInfo {
   tagline: string;
   desc: string;
   specs: string[];
+  /** Uitgebreide informatie achter de knop "Meer informatie" */
+  details: {
+    /** Korte inleiding bovenaan het informatievenster */
+    intro: string;
+    /** Waar deze bus bij uitstek geschikt voor is */
+    good: string[];
+    /** Praktische punten vooraf */
+    notes: string[];
+  };
   /** Echte foto (uitgesneden) met losse wielen; zonder foto wordt de illustratie gebruikt */
   photo?: { body: string; ratio: number; wheels: { src: string; x: number; y: number; r: number }[] };
   /** Getekende (cartoon) versie voor de voertuigenpagina */
@@ -59,6 +68,21 @@ export const VEHICLES: Record<VehicleId, VehicleInfo> = {
     tagline: "Compacte rolstoelbus",
     desc: "Ideaal voor kleine gezelschappen en vervoer van een rolstoelgebruiker. Uitgerust met oprijplaat, rolstoelvastzetsysteem en verlaagde vloer.",
     specs: ["5 personen incl. bestuurder", "1 rolstoelplaats", "Oprijplaat achter", "Gehandicaptenparkeerkaart aanwezig", "Airco & navigatie", "Automaat", "Rijbewijs B"],
+    details: {
+      intro: "De Doblò is onze compacte rolstoelbus: een gewone personenauto om te rijden, maar met een verlaagde vloer, een oprijplaat achterin en een vastzetsysteem voor de rolstoel. Hij rijdt automaat, dus u hoeft niet te schakelen.",
+      good: [
+        "Een dagje uit of familiebezoek met een rolstoelgebruiker erbij",
+        "Ritten naar ziekenhuis, revalidatie of dagbesteding",
+        "Kleine gezelschappen tot vier passagiers",
+        "Plekken waar parkeren krap is: hij rijdt en parkeert als een gewone auto",
+      ],
+      notes: [
+        "Rijdt op rijbewijs B, automaat — geen extra rijbewijs nodig.",
+        "Geeft u bij het boeken aan dat er een rolstoelgebruiker meerijdt? Dan leggen wij de oprijplaat en het vastzetsysteem voor u klaar.",
+        "Met de rolstoel aan boord blijven er vier zitplaatsen over, inclusief de bestuurder.",
+        "Er ligt een gehandicaptenparkeerkaart in de bus.",
+      ],
+    },
     photo: {
       body: "/img/doblo-body.webp", ratio: 1400 / 632,
       wheels: [
@@ -83,6 +107,21 @@ export const VEHICLES: Record<VehicleId, VehicleInfo> = {
     tagline: "Ruime 9-persoonsbus",
     desc: "Voor teams, families en verenigingen. Negen volwaardige zitplaatsen met gordels, veel bagageruimte en comfortabel op lange afstanden.",
     specs: ["9 personen incl. bestuurder", "Geen rolstoelvervoer", "Gehandicaptenparkeerkaart aanwezig", "Grote bagageruimte", "Airco & cruise control", "Handgeschakeld", "Rijbewijs B"],
+    details: {
+      intro: "De Talento is onze grote bus: negen volwaardige zitplaatsen met gordels en daarachter nog flink wat bagageruimte. Met airco en cruise control rijdt hij ook op langere afstanden comfortabel.",
+      good: [
+        "Teams, verenigingen en groepen tot acht passagiers",
+        "Familie-uitjes en weekendtrips met bagage",
+        "Vervoer van en naar een evenement, toernooi of festival",
+        "Langere ritten: cruise control en airco aan boord",
+      ],
+      notes: [
+        "Rijdt op rijbewijs B, maar is handgeschakeld en een stuk langer dan een personenauto — houd daar rekening mee bij parkeren.",
+        "Deze bus is niet geschikt voor rolstoelvervoer; daarvoor is de Doblò bedoeld.",
+        "Negen zitplaatsen inclusief bestuurder, allemaal met gordel.",
+        "Er ligt een gehandicaptenparkeerkaart in de bus.",
+      ],
+    },
   },
 };
 
