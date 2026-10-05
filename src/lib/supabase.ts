@@ -1,12 +1,26 @@
 import { createClient } from "@supabase/supabase-js";
 
-const url = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const key = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+/**
+ * Vaste projectgegevens, zodat elke build (Lovable, Netlify, waar dan ook) zonder
+ * instellen meteen met de echte database praat. De publishable key hoort in de
+ * browser thuis; de beveiliging zit in de RLS-regels op de database zelf.
+ * Met VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY wijs je desgewenst een ander
+ * project aan, en met VITE_DEMO=1 bouw je bewust een demo (alles in de browser).
+ */
+const DEFAULT_URL = "https://bjaihfjkfypbkfrgdpmd.supabase.co";
+const DEFAULT_KEY = "sb_publishable_P-G8K3wb5jElXl0pLT3dKw_exqpX790";
 
-/** True zolang er nog geen Supabase-gegevens in .env staan (site draait dan in demo-modus). */
-export const SUPABASE_CONFIGURED = Boolean(url && key && !url.includes("xxxx"));
+const DEMO = import.meta.env.VITE_DEMO === "1";
+const envUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const envKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
-export const supabase = createClient(url ?? "https://placeholder.supabase.co", key ?? "placeholder", {
+const url = envUrl && !envUrl.includes("xxxx") ? envUrl : DEFAULT_URL;
+const key = envKey && !envKey.includes("xxxx") ? envKey : DEFAULT_KEY;
+
+/** False alleen bij een bewuste demo-build; dan draait alles in de browser. */
+export const SUPABASE_CONFIGURED = !DEMO;
+
+export const supabase = createClient(url, key, {
   auth: { persistSession: true, autoRefreshToken: true },
 });
 
