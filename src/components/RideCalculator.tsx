@@ -26,12 +26,6 @@ function useTween(target: number, ms = 450) {
 
 const SLIDER_MAX = 600;   // bereik van de schuif
 const TYPED_MAX = 2000;   // wat u maximaal mag intypen
-const EXAMPLES: { label: string; km: number }[] = [
-  { label: "Ziekenhuis heen en terug", km: 40 },
-  { label: "Dagje Efteling", km: 120 },
-  { label: "Strand Scheveningen", km: 220 },
-  { label: "Weekend Ardennen", km: 520 },
-];
 
 const clamp = (n: number) => Math.min(TYPED_MAX, Math.max(1, Math.round(n)));
 
@@ -71,7 +65,7 @@ export function RideCalculator() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h3>Reken uw rit uit</h3>
-          <p className="text-[.86rem] text-ink2 mt-1">Vul in hoeveel kilometer u verwacht te rijden (heen en terug), of kies een voorbeeld.</p>
+          <p className="text-[.86rem] text-ink2 mt-1">Vul in hoeveel kilometer u verwacht te rijden (heen en terug).</p>
         </div>
         <span className="tag bg-brandSoft text-brand shrink-0 hidden sm:inline-flex">{eur(CONFIG.ratePerKm)} / km</span>
       </div>
@@ -107,19 +101,6 @@ export function RideCalculator() {
         <input type="range" min={10} max={SLIDER_MAX} step={10} value={Math.min(km, SLIDER_MAX)} onChange={(e) => apply(+e.target.value)} className="w-full accent-brand" aria-label="Aantal kilometers" />
         <div className="flex justify-between text-[.74rem] text-ink3 num -mt-1"><span>10 km</span><span>{SLIDER_MAX} km{km > SLIDER_MAX ? " +" : ""}</span></div>
         <p id="calc-km-hint" className="sr-only">Typ een afstand in kilometers of gebruik de schuif. Pijltje omhoog of omlaag past met 10 kilometer aan.</p>
-      </div>
-
-      {/* Voorbeeldritten */}
-      <div className="mt-4">
-        <span className="text-[.78rem] font-semibold uppercase tracking-[.08em] text-ink3">Voorbeelden</span>
-        <div className="flex gap-1.5 flex-wrap mt-2">
-          {EXAMPLES.map((ex) => (
-            <button key={ex.label} type="button" onClick={() => apply(ex.km)} aria-pressed={km === ex.km}
-              className={`tag border transition ${km === ex.km ? "bg-brand text-brandInk border-brand" : "bg-surface border-line text-ink2 hover:border-brand hover:text-ink"}`}>
-              {ex.label} <span className="opacity-70 num">· {ex.km} km</span>
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Bus / aantal personen */}
