@@ -184,7 +184,6 @@
 .calc-sum .calc-total { @apply mt-2 pt-3 border-t border-line text-ink font-semibold text-base; }
 .calc-sum dd.calc-total { @apply font-display font-extrabold text-[1.9rem] leading-none transition-transform duration-300; }
 .calc-sum dd.calc-total.is-moving { @apply text-brand; transform: scale(1.04); transform-origin: right center; }
-.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 /* Foto-bus in 3D */
 @keyframes pbDriveIn { 0% { transform: translateX(-140%) translateZ(0); } 75% { transform: translateX(-48%) translateZ(0); } 100% { transform: translateX(-50%) translateZ(0); } }
