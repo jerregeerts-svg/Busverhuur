@@ -171,6 +171,21 @@
 .lift { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .35s; }
 .lift:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -18px rgba(21,34,38,.35); border-color: rgb(var(--brand) / .4); }
 
+/* ---------- Rekenhulp ---------- */
+.calc-km-input { @apply inline-flex items-baseline gap-1.5 border-[1.5px] border-lineStrong rounded-lg bg-surface px-3 py-1.5 transition; }
+.calc-km-input:focus-within { @apply border-brand; box-shadow: 0 0 0 3px rgb(var(--brand) / .18); }
+.calc-km-input input { @apply w-[4.5ch] bg-transparent border-0 p-0 font-display font-extrabold text-[1.7rem] leading-none text-right text-ink outline-none num; }
+.calc-km-input span { @apply text-[.9rem] font-semibold text-ink2; }
+.calc-veh { @apply flex flex-col items-start gap-0.5 text-left px-3.5 py-2.5 rounded-lg border-[1.5px] border-line bg-surface text-ink2 transition; }
+.calc-veh:hover { @apply border-brand text-ink; }
+.calc-veh.is-on { @apply border-brand bg-brandSoft text-ink; }
+.calc-sum { @apply grid grid-cols-[1fr_auto] gap-x-0 gap-y-1.5 text-[.9rem] text-ink2 border-t border-line pt-4; }
+.calc-sum dd { @apply font-semibold text-ink text-right pl-4; }
+.calc-sum .calc-total { @apply mt-2 pt-3 border-t border-line text-ink font-semibold text-base; }
+.calc-sum dd.calc-total { @apply font-display font-extrabold text-[1.9rem] leading-none transition-transform duration-300; }
+.calc-sum dd.calc-total.is-moving { @apply text-brand; transform: scale(1.04); transform-origin: right center; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
 /* Foto-bus in 3D */
 @keyframes pbDriveIn { 0% { transform: translateX(-140%) translateZ(0); } 75% { transform: translateX(-48%) translateZ(0); } 100% { transform: translateX(-50%) translateZ(0); } }
 @keyframes pbBob { 0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg); } 30% { transform: translateX(-50%) translateY(-1.2px) rotate(-.15deg); } 70% { transform: translateX(-50%) translateY(.8px) rotate(.12deg); } }
