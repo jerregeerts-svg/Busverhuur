@@ -62,16 +62,8 @@ export function RideCalculator() {
 
   return (
     <div className="card a-up a-d3">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h3>Reken uw rit uit</h3>
-          <p className="text-[.86rem] text-ink2 mt-1">Kies uw bus en vul in hoeveel kilometer u verwacht te rijden (heen en terug).</p>
-        </div>
-        <span className="tag bg-brandSoft text-brand shrink-0 hidden sm:inline-flex">{eur(CONFIG.ratePerKm)} / km</span>
-      </div>
-
       {/* Bus / aantal personen */}
-      <div className="mt-5">
+      <div>
         <span className="text-[.78rem] font-semibold uppercase tracking-[.08em] text-ink3">Met welke bus rijdt u?</span>
         <div className="grid grid-cols-2 gap-2 mt-2" role="radiogroup" aria-label="Bus">
           {Object.values(VEHICLES).map((x) => (
@@ -82,6 +74,14 @@ export function RideCalculator() {
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="flex items-start justify-between gap-4 mt-5">
+        <div>
+          <h3>Reken uw rit uit</h3>
+          <p className="text-[.86rem] text-ink2 mt-1">Kies uw bus en vul in hoeveel kilometer u verwacht te rijden (heen en terug).</p>
+        </div>
+        <span className="tag bg-brandSoft text-brand shrink-0 hidden sm:inline-flex">{eur(CONFIG.ratePerKm)} / km</span>
       </div>
 
       {/* Afstand: intypen én schuiven */}
