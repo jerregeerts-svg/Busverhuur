@@ -1,5 +1,8 @@
 import { useRef, type MouseEvent } from "react";
 
+/** Zet een absoluut pad ("/img/x.webp") om naar het juiste pad onder de huidige basis-URL. */
+const withBase = (p: string) => (p.startsWith("/") ? import.meta.env.BASE_URL.replace(/\/$/, "") + p : p);
+
 export interface BusPhoto {
   /** Uitgesneden bus (transparante achtergrond) */
   body: string;
@@ -70,12 +73,12 @@ export function PhotoBus({ photo, driving = false, alt, toon = false }: { photo:
       <div ref={stage} className="pb-stage absolute inset-0">
         <div className="pb-bus absolute left-1/2 bottom-[9%] w-[78%]" style={{ aspectRatio: String(photo.ratio) }}>
           <div className="pb-shadow" />
-          <img src={photo.body} alt={alt} className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none" draggable={false} />
+          <img src={withBase(photo.body)} alt={alt} className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none" draggable={false} />
           {photo.wheels.map((w, i) => (
             <div key={i} aria-hidden="true" className="pb-wheel-wrap absolute select-none pointer-events-none"
               style={{ left: `${w.x - w.r}%`, top: `calc(${w.y}% - ${w.r}% * ${photo.ratio})`, width: `${w.r * 2}%`, aspectRatio: "1" }}>
-              <img src={w.src} alt="" draggable={false} className="pb-wheel pb-wheel-ghost absolute inset-0 w-full h-full" />
-              <img src={w.src} alt="" draggable={false} className="pb-wheel absolute inset-0 w-full h-full" />
+              <img src={withBase(w.src)} alt="" draggable={false} className="pb-wheel pb-wheel-ghost absolute inset-0 w-full h-full" />
+              <img src={withBase(w.src)} alt="" draggable={false} className="pb-wheel absolute inset-0 w-full h-full" />
             </div>
           ))}
         </div>
